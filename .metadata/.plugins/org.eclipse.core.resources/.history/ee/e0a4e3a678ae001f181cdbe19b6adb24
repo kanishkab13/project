@@ -1,0 +1,27 @@
+package com.cg.feign;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.cg.dto.DoctorDTO;
+
+@FeignClient(name="DoctorService-HospitalManagement", url="${DOCTOR_SERVICE:http://localhost:8800}")
+public interface DoctorFeignClient {
+//    @GetMapping("/find/{id}")
+//    DoctorDTO getDoctorById(@PathVariable("id") int did);
+	@GetMapping("/find/{id}")
+	public static ResponseEntity<DoctorDTO> getDoctorById(@PathVariable("id") int did) {
+	    // Assuming doctorService.getDoctorById() returns the DoctorDTO based on the id
+	    DoctorDTO doctor = doctorservice.getDoctorById(did);
+
+	    if (doctor != null) {
+	        return ResponseEntity.ok(doctor);  // 200 OK with DoctorDTO in the body
+	    } else {
+	        return ResponseEntity.notFound().build();  // 404 Not Found if doctor not found
+	    }
+	}
+
+}
+

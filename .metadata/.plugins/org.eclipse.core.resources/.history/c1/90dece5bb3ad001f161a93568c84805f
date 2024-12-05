@@ -1,0 +1,19 @@
+package com.cg.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.Doctor;
+import com.cg.repository.DoctorRepository;
+
+@Service
+public class DoctorService implements IDoctorService {
+	@Autowired
+	DoctorRepository docrepo;
+	@Override
+	public List<Doctor> findAll() {
+		return docrepo.findAll();
+	}
+}

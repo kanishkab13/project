@@ -1,0 +1,8 @@
+package com.cg.dto;
+
+public class PatientDTO {
+private int pid;
+private String pname;
+private int phone;
+private String address;
+}

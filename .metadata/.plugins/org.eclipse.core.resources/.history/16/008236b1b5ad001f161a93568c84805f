@@ -1,0 +1,7 @@
+package com.cg.dto;
+
+public class DoctorDTO {
+  private int did;
+  private String dname;
+  private String qualification;
+}

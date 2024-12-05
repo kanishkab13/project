@@ -1,0 +1,2 @@
+spring.application.name=DoctorService-HospitalManagement
+server.port=8800

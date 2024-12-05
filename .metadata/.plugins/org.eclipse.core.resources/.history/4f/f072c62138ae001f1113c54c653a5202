@@ -1,0 +1,28 @@
+package com.cg.dto;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AppointmentDTO {
+  private int did;
+  private int pid;
+  private LocalDateTime time;
+  private LocalDate date;
+  private int phone;
+  private String address;
+  
+  public static AppointmentDTO fromEntity(Patient patient) {
+	return new AppointmentDTO(patient.getPid(),patient.getPname(),patient.getPhone(),patient.getAddress());	  
+  }
+  
+  public Patient toEntity() {
+	  return new Patient(this.pid,this.pname,this.phone,this.address);
+  }
+}

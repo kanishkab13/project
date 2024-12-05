@@ -1,0 +1,10 @@
+package com.cg.service;
+
+import java.util.List;
+
+import com.cg.entity.Doctor;
+
+public interface IDoctorService {
+    List<Doctor> findAll();
+
+}

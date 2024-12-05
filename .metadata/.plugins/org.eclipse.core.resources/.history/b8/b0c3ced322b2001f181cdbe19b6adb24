@@ -1,0 +1,107 @@
+package com.cg.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cg.dto.DoctorDTO;
+import com.cg.entity.Doctor;
+import com.cg.exception.BadRequestException;
+import com.cg.exception.ResourceNotFoundException;
+import com.cg.service.IDoctorService;
+
+import jakarta.validation.Valid;
+
+@RequestMapping("/api")
+@RestController
+public class DoctorController {
+	@Autowired
+	IDoctorService doctorService;
+	
+	@GetMapping("/doctor")                       //http://localhost:8800/api/doc
+	public List<Doctor> getDoctors()
+	{
+		return doctorService.findAll();
+	}
+	
+//	@GetMapping("/doctors/{id}")
+//	public Optional<Doctor> findDoctorById(@PathVariable int id){
+//		return doctorservice.findDoctorById(id);	
+//	}
+	
+	@GetMapping("/doctor/{id}")
+    public Optional<Doctor>findByDoctorId(@Valid @PathVariable int id) throws ResourceNotFoundException{
+		Optional<Doctor> doctor = doctorService.findDoctorById(id);
+	    //java8 lambda version
+     	doctor.orElseThrow(() -> new ResourceNotFoundException("Doctor not found for this id :: " + id));
+        return doctor;	
+		
+	}
+	
+	@GetMapping("/doctor/mydoctor")
+	public Optional<Doctor> getDoctorById(@RequestParam int id){
+		return doctorservice.findDoctorById(id);	
+	}
+	
+	@PostMapping("/doctors")
+	public DoctorDTO createDoctor(@Validated @RequestBody DoctorDTO doctordto) {
+		Doctor doctor=doctordto.toEntity();
+		Doctor createdDoctor=doctorservice.CreateDoctor(doctor);
+		return DoctorDTO.fromEntity(createdDoctor);
+	}
+	
+	@PostMapping("/doctor")   //to add product in postman without manually inserting into postgres
+	public Doctor createMyDoctor(@Valid @RequestBody Doctor doctor) throws BadRequestException {
+		if (doctor.getDname() == null || doctor.getDid() <=0||doctor.getDname()=="") {
+            throw new BadRequestException("Doctor name or id  is invalid.");
+		}	
+		return doctorservice.CreateDoctor(doctor);
+	}
+	
+	
+	@DeleteMapping("/doctors/{id}")
+	public String deleteDoctorById(@PathVariable int id) {
+		String r=doctorservice.DeleteDoctorbyId(id);
+		return r;
+	}
+	
+	@PutMapping("/doctors")
+	public Doctor UpdateDoctor(@RequestBody Doctor d) {
+		return doctorservice.UpdateData(d);
+	}
+	
+   @GetMapping("/count/{dname}")        //http://localhost:8800/api/count/Varun
+	public int FindCount(@PathVariable String dname)
+	{
+		return doctorservice.getCountByDname(dname);
+	}
+	
+	@Value("${error.doctorNotFound}")
+    private String doctorNotFoundMessage;
+    @Value("${error.doctorDeletionFailed}")
+    private String doctorDeletionFailedMessage;
+    @Value("${error.doctorAlreadyExists}")
+    private String doctorAlreadyExistsMessage;
+ 
+    @PostMapping("/adddoctors")
+    public Doctor addDoctor(@RequestBody @Valid Doctor doctor) throws ResourceNotFoundException {
+        Optional<Doctor> existingDoctor = doctorservice.findDoctorById(doctor.getDid());
+       if (existingDoctor.isPresent()) {
+            throw new ResourceNotFoundException(String.format(doctorAlreadyExistsMessage,doctor.getDname()));
+        }
+        return doctorservice.CreateDoctor(doctor);
+    }	
+			
+}

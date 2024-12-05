@@ -1,0 +1,7 @@
+1732820310128	Rename type 'DoctorServiceHospitalManagementApplication'
+1732820353267	Rename type 'DoctorController'
+1732820367030	Rename type 'DoctorDTO'
+1732820382867	Rename type 'Doctor'
+1732820410810	Rename type 'DoctorRepository'
+1732820426607	Rename type 'DoctorService'
+1732820442298	Rename type 'IDoctorService'

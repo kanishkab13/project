@@ -1,0 +1,12 @@
+package com.cg.feign;
+
+import org.springframework.cloud.openfeign.FeignClient;
+
+
+@FeignClient(name="DoctorService-HospitalManagement", url="${DOCTOR_SERVICE:http://localhost:8800}")
+public interface DoctorFeignClient {
+//    @GetMapping("/find/{id}")
+//    DoctorDTO getDoctorById(@PathVariable("id") int did);
+	
+}
+

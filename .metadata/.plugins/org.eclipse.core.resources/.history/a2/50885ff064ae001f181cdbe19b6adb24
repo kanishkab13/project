@@ -1,0 +1,72 @@
+package com.cg.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cg.dto.AppointmentDTO;
+import com.cg.dto.DoctorDTO;
+import com.cg.entity.Appointment;
+import com.cg.feign.DoctorFeignClient;
+import com.cg.service.IAppointmentService;
+
+@RequestMapping("/api")
+@RestController
+public class AppointmentController {
+	@Autowired
+	IAppointmentService appointmentservice;
+	
+	@Autowired
+	DoctorFeignClient docfeign;
+
+	@GetMapping("/appointment")
+	public List<Appointment> getAppointments()
+	{
+		return appointmentservice.findAll();
+	}
+	
+	@GetMapping("/appointment/{id}")
+	public Optional<Appointment> findAppointmentById(@PathVariable int id){
+		return appointmentservice.findAppointmentById(id);
+	}
+	
+	public DoctorDTO getDoctorById(@PathVariable("doctorId") int doctorId) {
+		return docfeign.getDoctorById(doctorId);
+	
+		
+	}
+	
+	@GetMapping("/app/myapp")
+	public Optional<Appointment> getAppointmentById(@RequestParam int id){
+		return appointmentservice.findAppointmentById(id);
+	}
+	
+	@PostMapping("/app")
+	public AppointmentDTO createAppointment(@Validated @RequestBody AppointmentDTO appointmentdto) {
+		Appointment appointment=appointmentdto.toEntity();
+		Appointment createdAppointment=appointmentservice.CreateAppointment(appointment);
+		return AppointmentDTO.fromEntity(createdAppointment);
+	}
+	
+	@DeleteMapping("/app/{id}")
+	public String deleteAppointmentById(@PathVariable int id) {
+		String r=appointmentservice.DeleteAppointmentbyId(id);
+		return r;
+	}
+	
+	@PutMapping("/app")
+	public Appointment UpdateAppointment(@RequestBody Appointment a) {
+		return appointmentservice.UpdateData(a);
+	}
+}

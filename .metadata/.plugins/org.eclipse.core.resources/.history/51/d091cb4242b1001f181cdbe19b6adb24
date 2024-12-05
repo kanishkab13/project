@@ -1,0 +1,4 @@
+spring.application.name=EurekaServer-HospitalManagement
+server.port=8803
+
+

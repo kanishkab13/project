@@ -1,0 +1,8 @@
+package com.cg.feign;
+
+import org.springframework.cloud.openfeign.FeignClient;
+
+@FeignClient(name="PatientService-HospitalManagement",url="${DOCTOR_SERVICE:http://localhost:8801}")
+public interface DoctorFeign {
+
+}

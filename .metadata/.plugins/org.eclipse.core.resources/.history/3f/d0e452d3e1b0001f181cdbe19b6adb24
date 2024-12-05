@@ -1,0 +1,6 @@
+package com.cg.feign;
+
+@Component
+public class DoctorFeignClientFallback {
+
+}

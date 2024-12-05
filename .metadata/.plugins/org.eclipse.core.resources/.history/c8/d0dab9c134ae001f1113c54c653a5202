@@ -1,0 +1,45 @@
+package com.cg.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.Appointment;
+import com.cg.repository.AppointmentRepository;
+
+@Service
+public class AppointmentService implements IAppointmentService {
+	@Autowired
+	AppointmentRepository apprepo;
+	@Override
+	public List<Appointment> findAll() {
+		return apprepo.findAll();
+	}
+	public Optional<Appointment> findAppointmentById(int id) {
+		return apprepo.findById(id);
+	}
+	
+	public Appointment CreateAppointment(Appointment a) {
+		return apprepo.save(a);
+	}
+	
+	public String DeleteAppointmentbyId(int id) {
+		if (apprepo.existsById(id)) {
+	        patrepo.deleteById(id);;
+	         return "deleted";
+	    } else {
+	    	 return "id not found";
+	    }
+			
+	}
+	
+	public Patient UpdateData(Patient p) {	
+		return patrepo.save(p);
+	}
+
+}
+
+
+

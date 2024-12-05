@@ -1,0 +1,35 @@
+package com.cg.feign;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Component;
+
+import com.cg.dto.DoctorDTO;
+
+@Component
+public class DoctorFeignClientFallback implements DoctorFeignClient {
+
+	@Override
+	public DoctorDTO getDoctorById(int id) {
+		return new DoctorDTO();
+	}
+
+	@Override
+	public List<DoctorDTO> productResponse() {                //static data
+	    return Stream.of(
+	            new DoctorDTO(11, "Marc", "Neurosurgeon"),
+	            new DoctorDTO(34, "Preeti", "MD"),
+	            new DoctorDTO(47, "Rohan", "BAMS"),
+	            new DoctorDTO(57, "Siya", "Cardiologist"),
+	            new DoctorDTO(67, "Anu", "MBBS"),
+	            new DoctorDTO(53, "Nyra", "PHD")
+	    ).collect(Collectors.toList());
+	}
+	
+	@Override
+    public String getException() {
+        return "Fixed response";
+    }
+}

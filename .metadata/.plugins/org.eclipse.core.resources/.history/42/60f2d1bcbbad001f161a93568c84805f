@@ -1,0 +1,45 @@
+package com.cg.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.Patient;
+import com.cg.repository.PatientRepository;
+
+@Service
+public class PatientService implements IPatientService {
+	@Autowired
+	PatientRepository patrepo;
+	@Override
+	public List<Patient> findAll() {
+		return patrepo.findAll();
+	}
+	public Optional<Patient> findPatientById(int id) {
+		return patrepo.findById(id);
+	}
+	
+	public Patient CreateDoctor(Patient d) {
+		return patrepo.save(d);
+	}
+	
+	public String DeleteDoctorbyId(int id) {
+		if (docrepo.existsById(id)) {
+	        docrepo.deleteById(id);;
+	         return "deleted";
+	    } else {
+	    	 return "id not found";
+	    }
+			
+	}
+	
+	public Patient UpdateData(Patient d) {	
+		return docrepo.save(d);
+	}
+
+}
+
+
+
